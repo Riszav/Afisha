@@ -15,7 +15,7 @@ class MovieSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movie
-        fields = 'id title description duration director_name reviews average_rating'.split()
+        fields = 'id title description duration director_name reviews average_rating category tags'.split()
         depth = 1
 
     # def get_director(self, movie):

@@ -1,5 +1,20 @@
 from django.db import models
 
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
 class Director(models.Model):
     name = models.CharField(max_length=100)
 
@@ -20,9 +35,16 @@ class Movie(models.Model):
     duration = models.FloatField()
     director = models.ForeignKey(
         "movie_app.Director",
-        on_delete=models.DO_NOTHING,
-        related_name="movies"
+        on_delete=models.CASCADE,
+        related_name="movies",
     )
+    category = models.ForeignKey(
+        "movie_app.Category",
+        on_delete=models.CASCADE,
+        related_name="movies",
+        null=True)
+    tags = models.ManyToManyField(Tag, blank=True)
+
 
     def __str__(self):
         return self.title
@@ -35,13 +57,13 @@ class Movie(models.Model):
     def average_rating(self):
         summ = 0
         count = 0
-        for i in self.reviews.all():
-            summ += i.stars
-            count += 1
-
-
-        average = summ / count
-        return average
+        if self.reviews.all():
+            for i in self.reviews.all():
+                summ += i.stars
+                count += 1
+            average = summ / count
+            return average
+        return 0
 
 
 STAR_CHOICES = (
