@@ -21,6 +21,11 @@ class Director(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:  # Мета класс - Это класс, который содержит дополнительную информацию о модели
+        db_table = 'directors'  # Название таблицы в базе данных (по умолчанию appname_classname (post_postinfo))
+        verbose_name = 'Директор'  # Название модели в единственном числе
+        verbose_name_plural = 'Директоры'  # Название модели во множественном числе
+
     @property
     def movies_count(self):
         count = 0
@@ -48,6 +53,12 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:  # Мета класс - Это класс, который содержит дополнительную информацию о модели
+        db_table = 'movies'  # Название таблицы в базе данных (по умолчанию appname_classname (post_postinfo))
+        verbose_name = 'Кино'  # Название модели в единственном числе
+        verbose_name_plural = 'Кино'  # Название модели во множественном числе
+
 
     @property
     def director_name(self):
@@ -77,6 +88,12 @@ class Review(models.Model):
         related_name="reviews"
     )
     stars = models.IntegerField(choices=STAR_CHOICES, default=5)
+
+    class Meta:  # Мета класс - Это класс, который содержит дополнительную информацию о модели
+        db_table = 'reviews'  # Название таблицы в базе данных (по умолчанию appname_classname (post_postinfo))
+        verbose_name = 'Отзыв'  # Название модели в единственном числе
+        verbose_name_plural = 'Отзывы'  # Название модели во множественном числе
+
 
     def __str__(self):
         return f'"{self.movie}" - {self.text}'

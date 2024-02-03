@@ -25,10 +25,9 @@ def director_detail_api_view(request, id):
         serializer = DirectorValidateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        director.name = request.data.get('name')
+        director.name = serializer.validated_data.get('name')
         director.save()
         return Response(data={'director_id': director.id}, status=status.HTTP_201_CREATED)
-
 
 
 @api_view(['GET', 'POST'])
@@ -48,9 +47,9 @@ def director_list_api_view(request):
         serializer = DirectorValidateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        name = request.data.get('name')
+        # name = serializer.validated_data.get('name')
 
-        director = Director.objects.create(name=name)
+        director = Director.objects.create(**serializer.validated_data)
 
         return Response(data={'director_id': director.id}, status=status.HTTP_201_CREATED)
 
@@ -75,17 +74,18 @@ def movie_detail_api_view(request, id):
         serializer = MovieValidateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        movie.title = request.data.get('title')
-        movie.description = request.data.get('description')
-        movie.duration = request.data.get('duration')
-        movie.director_id = request.data.get('director_id')
-        movie.category_id = request.data.get('category_id')
-        movie.tags.set(request.data.get('tags'))
+        movie.title = serializer.validated_data.get('title')
+        movie.description = serializer.validated_data.get('description')
+        movie.duration = serializer.validated_data.get('duration')
+        movie.director_id = serializer.validated_data.get('director_id')
+        movie.category_id = serializer.validated_data.get('category_id')
+        movie.tags.set(serializer.validated_data.get('tags'))
         movie.save()
         return Response(data={'movie_id': movie.id}, status=status.HTTP_201_CREATED)
 
 @api_view(['GET', 'POST'])
 def movie_list_api_view(request):
+    print(request.user)
     if request.method == 'GET':
         # Step 1: Collect data of products from DB
         movie = Movie.objects.select_related('director','category').prefetch_related('reviews','tags').all()
@@ -98,19 +98,17 @@ def movie_list_api_view(request):
 
     elif request.method == 'POST':
         serializer = MovieValidateSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(status=status.HTTP_400_BAD_REQUEST, data={'errors': serializer.errors})
+        serializer.is_valid(raise_exception=True)
 
-        title = request.data.get('title')
-        description = request.data.get('description')
+        title = serializer.validated_data.get('title')
+        description = serializer.validated_data.get('description')
         duration = request.data.get('duration')
         director_id = request.data.get('director_id')
         category_id = request.data.get('category_id')
         tags = request.data.get('tags')
-
-
         movie = Movie.objects.create(title=title, description=description, duration=duration,
                                      director_id=director_id, category_id=category_id)
+
         movie.tags.set(tags)
         movie.save()
 
@@ -136,9 +134,9 @@ def review_detail_api_view(request, id):
         serializer = ReviewValidateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        review.text = request.data.get('text')
-        review.movie_id = request.data.get('movie_id')
-        review.stars = request.data.get('stars')
+        review.text = serializer.validated_data.get('text')
+        review.movie_id = serializer.validated_data.get('movie_id')
+        review.stars = serializer.validated_data.get('stars')
 
         review.save()
         return Response(data={'movie_id': review.id}, status=status.HTTP_201_CREATED)
@@ -161,11 +159,10 @@ def review_list_api_view(request):
         serializer = ReviewValidateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        text = request.data.get('text')
-        movie_id = request.data.get('movie_id')
-        stars = request.data.get('stars')
+        # text = request.data.get('text')
+        # movie_id = request.data.get('movie_id')
+        # stars = request.data.get('stars')
 
-
-        review = Review.objects.create(text=text, movie_id=movie_id, stars=stars)
+        review = Review.objects.create(**serializer.validated_data)
 
         return Response(data={'review_id': review.id}, status=status.HTTP_201_CREATED)

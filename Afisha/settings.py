@@ -37,8 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #
+    # 'django.contrib.sites',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
+
     'rest_framework',
-    'movie_app'
+    'movie_app',
+    'users',
+    'rest_framework.authtoken'
 ]
 
 QUERYCOUNT = {
@@ -63,7 +72,34 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'querycount.middleware.QueryCountMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'allauth.account.middleware.AccountMiddleware'
 ]
+
+#
+# SITE_ID = 1
+#
+# # Добавьте следующие настройки для allauth
+# AUTHENTICATION_BACKENDS = [
+#     # ...
+#     'allauth.account.auth_backends.AuthenticationBackend',
+# ]
+#
+# ACCOUNT_EMAIL_VERIFICATION = 'none'  # Отключить подтверждение email
+# ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1  # Срок действия подтверждения email в днях
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "deriszav@gmail.com"
+EMAIL_HOST_PASSWORD = "gjph bddu vooz jebg"
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
 
 ROOT_URLCONF = 'Afisha.urls'
 
