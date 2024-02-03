@@ -1,3 +1,4 @@
 /Afisha/settings.py
 db.sqlite3
 .idea
+const.py
