@@ -5,6 +5,7 @@ from rest_framework.exceptions import ValidationError
 
 
 class DirectorSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(min_length=2, max_length=100)
 
     class Meta:
         model = Director
@@ -14,6 +15,7 @@ class DirectorSerializer(serializers.ModelSerializer):
 class MovieSerializer(serializers.ModelSerializer):
     # director = serializers.SerializerMethodField()
     # reviews = ReviewSerializer(many=True)
+
 
     class Meta:
         model = Movie
@@ -26,7 +28,17 @@ class MovieSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     movie = serializers.SerializerMethodField()
-
+    # text = serializers.CharField()
+    # movie_id = serializers.IntegerField()
+    # stars = serializers.IntegerField(min_value=1, max_value=5)
+    #
+    # def validate_movie_id(self, movie_id):
+    #     try:
+    #         Movie.objects.get(id=movie_id)
+    #     except Movie.DoesNotExist:
+    #         raise ValidationError('Movie not found!')
+    #     return movie_id
+    #
     class Meta:
         model = Review
         fields = 'id text movie stars'.split()
@@ -36,7 +48,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class DirectorValidateSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=100)
+    name = serializers.CharField(min_length=2, max_length=100)
 
 
 class MovieValidateSerializer(serializers.Serializer):
@@ -57,8 +69,8 @@ class MovieValidateSerializer(serializers.Serializer):
     def validate_category_id(self, category_id):
         try:
             Category.objects.get(id=category_id)
-        except Director.DoesNotExist:
-            raise ValidationError('Director not found!')
+        except Category.DoesNotExist:
+            raise ValidationError('Category not found!')
         return category_id
 
 

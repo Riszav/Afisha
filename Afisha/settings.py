@@ -97,6 +97,7 @@ EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
 REST_FRAMEWORK = {
+    'PAGE_SIZE': 4,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
